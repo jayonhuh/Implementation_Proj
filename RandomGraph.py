@@ -4,7 +4,7 @@ import Queue
 import pylab as pl
 import numpy as np
 
-def main():
+def graphExec():
 	# value of the number of nodes in our random graph
 	n = 20 
 
@@ -21,13 +21,13 @@ def main():
 	numComps = [0] * k
 
 	# storing standard deviation for every value of p
-	stdArray = [0] * 50
+	stdArray = [0] * 51
 
 	# storing mean for every value of p
-	meanArray = [0] * 50
+	meanArray = [0] * 51
 
 	# array of p
-	pArray = [0] * 50
+	pArray = [0] * 51
 
 	# loop through values of p.
 	for prob in xrange(0, 51):
@@ -41,7 +41,7 @@ def main():
 		for samples in xrange(0, k):
 		
 			# Go through the newly initialized random graph
-			for x in xrange(1, n - 1):
+			for x in xrange(1, n):
 				for y in xrange(x + 1, n): 
 
 					# no edge between self
@@ -49,6 +49,8 @@ def main():
 						randomGraph[x][y] = 0
 
 					# generate a uniform random number between p and 1
+					randomNumber = 0.00
+
 					randomNumber = random.uniform(0, 1)
 
 					# check if the random number generated is less than our p
@@ -61,7 +63,7 @@ def main():
 						randomGraph[x][y] = randomNumber
 
 
-			numComps[k] = connectedComps(randomGraph)
+			numComps[samples] = connectedComps(randomGraph, n)
 
 		# compute standard deviation and mean to store into arrrays
 
@@ -87,22 +89,23 @@ def main():
 
 	pl.plot(pArray, meanArray)
 
-	pl.show()
+	pl.ion()
+
 
 
 
 
 # function that finds the number of connected components based on an adj matrix
-def connectedComps(adjMatrix):
+def connectedComps(adjMatrix, n):
 
 	# array of vertices
-	marks[0] * n
+	marks = [0] * n
 
 	# number of components
 	components = 0
 
 	# queue that we are going to use
-	q = Queue()
+	q = Queue.Queue()
 
 	# loop through each vertex in graph
 	for i in xrange(0, n):
@@ -116,7 +119,7 @@ def connectedComps(adjMatrix):
 			marks[i] = components
 
 		# while the queue is not empty
-		while q.empty() == false:
+		while q.empty() == 'false':
 
 			# push next element from queue
 			temp = q.get()
@@ -132,7 +135,7 @@ def connectedComps(adjMatrix):
 	return components
 
 
-
+graphExec()
 
 
 
