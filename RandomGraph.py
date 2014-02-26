@@ -33,7 +33,7 @@ def graphExec():
 	for prob in xrange(0, 51):
 
 		# initialize value of p
-		p = prob/50
+		p = prob/50.00
 
 		pArray[prob] = p
 
@@ -89,7 +89,7 @@ def graphExec():
 
 	pl.plot(pArray, meanArray)
 
-	pl.ion()
+	pl.show()
 
 
 
@@ -105,7 +105,7 @@ def connectedComps(adjMatrix, n):
 	components = 0
 
 	# queue that we are going to use
-	q = Queue.Queue()
+	q = Queue.Queue(0)
 
 	# loop through each vertex in graph
 	for i in xrange(0, n):
@@ -124,13 +124,16 @@ def connectedComps(adjMatrix, n):
 			# push next element from queue
 			temp = q.get()
 
-			for j in xrange(0, n):
+			print temp
 
-				if adjMatrix[i][j] > 0:
+			for j in xrange(i + 1, n):
+
+				if adjMatrix[temp][j] > 0:
 
 					if marks[j] == 0:
 
 						q.put(j)
+
 
 	return components
 
