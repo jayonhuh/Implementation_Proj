@@ -5,6 +5,7 @@ import pylab as pl
 import numpy as np
 
 def graphExec():
+
 	# value of the number of nodes in our random graph
 	n = 20 
 
@@ -41,26 +42,29 @@ def graphExec():
 		for samples in xrange(0, k):
 		
 			# Go through the newly initialized random graph
-			for x in xrange(1, n):
-				for y in xrange(x + 1, n): 
+			for x in xrange(0, n):
 
-					# no edge between self
+				for y in xrange(x, n): 
+
+					# there will be no self edges.
 					if x == y:
 						randomGraph[x][y] = 0
 
-					# generate a uniform random number between p and 1
-					randomNumber = 0.00
-
-					randomNumber = random.uniform(0, 1)
-
-					# check if the random number generated is less than our p
-					# if it is less than p then there is no edge at current relation
-					if randomNumber < p:
-						randomGraph[x][y] = 0
-
-					# if random number is greater than p, then that number becomes the relation's weight
+					# give every possible edge a random value
 					else:
-						randomGraph[x][y] = randomNumber
+						# generate a uniform random number between p and 1
+						randomNumber = 0.00
+						randomNumber = random.uniform(0, 1)
+
+						# check if the random number generated is less than our p
+						# if it is less than p then there is no edge at current relation
+						if randomNumber < p:
+
+							randomGraph[x][y] = 0
+
+						# if random number is greater than p, then that number becomes the relation's weight
+						else:
+							randomGraph[x][y] = randomNumber
 
 			numComps[samples] = connectedComps(randomGraph, n)
 
