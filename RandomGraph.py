@@ -38,8 +38,6 @@ def graphExec():
 
 		pArray[prob] = p
 
-		#print p
-
 		# loop k times to get many samples
 		for samples in xrange(0, k):
 		
@@ -67,8 +65,6 @@ def graphExec():
 						# if random number is greater than p, then that number becomes the relation's weight
 						else:
 							randomGraph[x][y] = randomNumber
-
-						#print randomGraph[x][y]
 
 			numComps[samples] = connectedComps(randomGraph, n)
 
@@ -113,15 +109,9 @@ def connectedComps(randomGraph, n):
 
 	visited[0] = True
 
-	print 'initial visisted', visited[1]
-
 	q.put(0)
 
-
-
 	while q.empty() == False:
-
-		print 'que not empty'
 
 		temp = q.get()
 
@@ -130,8 +120,6 @@ def connectedComps(randomGraph, n):
 			if neighbor != temp:
 	
 				if randomGraph[temp][neighbor] > 0:
-
-					print visited[1]
 
 					if visited[neighbor] == False:
 
@@ -146,7 +134,6 @@ def connectedComps(randomGraph, n):
 			for i in xrange(0, n):
 
 				if visited[i] == False:
-					print i, ' has not been visited'
 					q.put(i)
 					visited[i] = True
 					break
