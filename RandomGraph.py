@@ -62,7 +62,6 @@ def graphExec():
 					else:
 						randomGraph[x][y] = randomNumber
 
-
 			numComps[samples] = connectedComps(randomGraph, n)
 
 		# compute standard deviation and mean to store into arrrays
@@ -105,7 +104,7 @@ def connectedComps(adjMatrix, n):
 	components = 0
 
 	# queue that we are going to use
-	q = Queue.Queue(0)
+	q = Queue.Queue()
 
 	# loop through each vertex in graph
 	for i in xrange(0, n):
@@ -113,29 +112,29 @@ def connectedComps(adjMatrix, n):
 		# check if the mark is 0
 		if marks[i] == 0:
 
-			# if so, add 1 to the componenet and put i into queue
+			# if so, add 1 to the component and put i into queue
 			components += 1
 			q.put(i)
-			marks[i] = components
 
-		# while the queue is not empty
-		while q.empty() == 'false':
+			# while the queue is not empty
+			while q.empty() != 'True':
 
-			# push next element from queue
-			temp = q.get()
+				# push next element from queue
+				temp = q.get()
 
-			print temp
+				marks[temp] = components
 
-			for j in xrange(i + 1, n):
+				for j in xrange(0, n):
 
-				if adjMatrix[temp][j] > 0:
+					if adjMatrix[j][temp] > 0:
 
-					if marks[j] == 0:
+						if marks[j] == 0:
 
-						q.put(j)
-
+							q.put(j)
 
 	return components
+
+
 
 
 graphExec()
