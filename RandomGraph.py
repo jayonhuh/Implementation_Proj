@@ -58,7 +58,7 @@ def graphExec():
 
 						# check if the random number generated is less than our p
 						# if it is less than p then there is no edge at current relation
-						if randomNumber < p:
+						if randomNumber >= p:
 
 							randomGraph[x][y] = 0
 
@@ -66,6 +66,8 @@ def graphExec():
 						else:
 							randomGraph[x][y] = randomNumber
 
+			#print p
+			#print randomGraph
 			numComps[samples] = connectedComps(randomGraph, n)
 
 		# compute standard deviation and mean to store into arrrays
@@ -89,6 +91,13 @@ def graphExec():
 		stdArray[prob] = std
 
 	# Plotting all of our results
+
+	#pArray.reverse()
+
+	#print pArray
+	#print meanArray
+
+	#meanArray.reverse()
 
 	pl.plot(pArray, meanArray)
 
@@ -138,6 +147,7 @@ def connectedComps(randomGraph, n):
 					visited[i] = True
 					break
 
+	#print components
 	return components
 
 
