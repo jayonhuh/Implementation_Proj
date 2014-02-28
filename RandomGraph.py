@@ -7,7 +7,7 @@ import numpy as np
 def graphExec():
 
 	# value of the number of nodes in our random graph
-	n = 20 
+	n = 20
 
 	# p is the probablility of whether the edge exists
 	p = 0.00
@@ -38,6 +38,8 @@ def graphExec():
 
 		pArray[prob] = p
 
+		#print p
+
 		# loop k times to get many samples
 		for samples in xrange(0, k):
 		
@@ -65,6 +67,8 @@ def graphExec():
 						# if random number is greater than p, then that number becomes the relation's weight
 						else:
 							randomGraph[x][y] = randomNumber
+
+						#print randomGraph[x][y]
 
 			numComps[samples] = connectedComps(randomGraph, n)
 
@@ -99,44 +103,63 @@ def graphExec():
 
 
 # function that finds the number of connected components based on an adj matrix
-def connectedComps(adjMatrix, n):
+def connectedComps(randomGraph, n):
 
-	# array of vertices
-	marks = [0] * n
-
-	# number of components
 	components = 0
 
-	# queue that we are going to use
 	q = Queue.Queue()
 
-	# loop through each vertex in graph
-	for i in xrange(0, n):
+	visited = [False] * n
 
-		# check if the mark is 0
-		if marks[i] == 0:
+	visited[0] = True
 
-			# if so, add 1 to the component and put i into queue
+	print 'initial visisted', visited[1]
+
+	q.put(0)
+
+
+
+	while q.empty() == False:
+
+		print 'que not empty'
+
+		temp = q.get()
+
+		for neighbor in xrange(0, n):
+
+			if neighbor != temp:
+	
+				if randomGraph[temp][neighbor] > 0:
+
+					print visited[1]
+
+					if visited[neighbor] == False:
+
+						q.put(neighbor)
+						visited[neighbor] = True
+
+
+		if q.empty() == True:
+
 			components += 1
-			q.put(i)
 
-			# while the queue is not empty
-			while q.empty() != 'True':
+			for i in xrange(0, n):
 
-				# push next element from queue
-				temp = q.get()
-
-				marks[temp] = components
-
-				for j in xrange(0, n):
-
-					if adjMatrix[j][temp] > 0:
-
-						if marks[j] == 0:
-
-							q.put(j)
+				if visited[i] == False:
+					print i, ' has not been visited'
+					q.put(i)
+					visited[i] = True
+					break
 
 	return components
+
+
+
+
+
+
+
+
 
 
 
