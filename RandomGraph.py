@@ -3,11 +3,16 @@ import random
 import Queue
 import pylab as pl
 import numpy as np
+import timeit
+
 
 def graphExec():
 
+	start = timeit.default_timer()
+
+
 	# value of the number of nodes in our random graph
-	n = 20
+	n = 100
 
 	# p is the probablility of whether the edge exists
 	p = 0.00
@@ -102,6 +107,12 @@ def graphExec():
 	pl.plot(pArray, meanArray)
 
 	pl.show()
+
+	stop = timeit.default_timer()
+
+	print stop - start 
+
+
 
 
 
