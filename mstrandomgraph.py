@@ -12,7 +12,7 @@ def graphExec():
 
 
 	# value of the number of nodes in our random graph
-	n = 500
+	n = 20
 
 	# p is the probablility of whether the edge exists
 	p = 0.00
@@ -104,11 +104,11 @@ def graphExec():
 
 	#meanArray.reverse()
 
-	pl.plot(pArray, stdArray)
+	#pl.plot(pArray, stdArray)
 
-	pl.show()
+	#pl.show()
 
-	stop = timeit.default_timer()
+	#stop = timeit.default_timer()
 
 	print stop - start 
 
@@ -125,9 +125,9 @@ def connectedComps(randomGraph, n):
 
 	q = Queue.Queue()
 
-	visited = [False] * n
+	marks = [0] * n
 
-	visited[0] = True
+	marks[0] = 1
 
 	q.put(0)
 
@@ -141,10 +141,10 @@ def connectedComps(randomGraph, n):
 	
 				if randomGraph[temp][neighbor] > 0:
 
-					if visited[neighbor] == False:
+					if marks[neighbor] == 0:
 
 						q.put(neighbor)
-						visited[neighbor] = True
+						marks[neighbor] = components
 
 
 		if q.empty() == True:
@@ -153,12 +153,12 @@ def connectedComps(randomGraph, n):
 
 			for i in xrange(0, n):
 
-				if visited[i] == False:
+				if marks[i] == 0:
 					q.put(i)
-					visited[i] = True
+					marks[i] = components
 					break
 
-	#print components
+	# print marks
 	return components
 
 
@@ -173,11 +173,3 @@ def connectedComps(randomGraph, n):
 
 
 graphExec()
-
-
-
-
-
-
-
-
