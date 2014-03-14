@@ -18,7 +18,7 @@ def graphExec():
 	p = 0.00
 
 	# the number of times this is going to run
-	k = 500
+	k = 200
 
 	# initialize the array of size nxn
 	randomGraph = [[0 for x in xrange(n)] for x in xrange(n)] 
@@ -26,11 +26,8 @@ def graphExec():
 	# used to store number of connected components
 	numComps = [0] * k
 
-	# storing standard deviation for every value of p
-	stdArray = [0] * 51
-
-	# storing mean for every value of p
-	meanArray = [0] * 51
+	# storing our avg MST weight
+	mstWeightArray = [0] * 51
 
 	# array of p
 	pArray = [0] * 51
@@ -43,8 +40,11 @@ def graphExec():
 
 		pArray[prob] = p
 
+
 		# loop k times to get many samples
 		for samples in xrange(0, k):
+
+			MSTWeightSampleSum = 0.0000000000
 		
 			# Go through the newly initialized random graph
 			for x in xrange(0, n):
@@ -66,51 +66,105 @@ def graphExec():
 						if randomNumber >= p:
 
 							randomGraph[x][y] = 0
+							randomGraph[y][x] = 0
 
 						# if random number is greater than p, then that number becomes the relation's weight
 						else:
 							randomGraph[x][y] = randomNumber
+							randomGraph[y][x] = randomNumber
 
-			#print p
-			#print randomGraph
-			numComps[samples] = connectedComps(randomGraph, n)
+			# here we have a newly created random graph. We find the connected components
+			newMarks = connectedComps(randomGraph, n)
 
-		# compute standard deviation and mean to store into arrrays
+			#print newMarks
 
-		# calculating mean
-		mean = 0;
-		for comps in xrange(0, k):
-			mean += numComps[comps]
+			# with this array, we create smaller adjacency matrices to represent our connected components
+			numConnectedComponents = max(newMarks)
 
-		mean = mean/k
+			#print max(newMarks)
 
-		# calculating standard deviation
-		std = 0;
-		for comps in xrange(0, k):
-			std += (numComps[comps] - mean)**2
+			# this variable will contain the average MST weight of this graph
+			avgMSTWeightForOneGraph = 0.000000000000000
 
-		std = (std/k) ** 0.5
+			# loop through each connected component
+			for i in xrange(1, numConnectedComponents + 1):
 
-		# store in our arrays
-		meanArray[prob] = mean
-		stdArray[prob] = std
+				# create a temp array to store the adj matrix for our connected component
+				connectedComponentNodes = []
 
-	# Plotting all of our results
+				# go through our array that tells us which nodes are part of which connected component
+				for j in xrange(0, n):
 
-	#pArray.reverse()
+					# if the selected node is part of the ith connected component...
+					if(newMarks[j] == i):
 
-	#print pArray
-	#print meanArray
+						# then add it into our temporary array
+						connectedComponentNodes.append(j)
 
-	#meanArray.reverse()
+				# at this point, we have a list with nodes pertaining to a single connected component
 
-	#pl.plot(pArray, stdArray)
+				# find the size of our connected component
+				newConnectedComponentSize = len(connectedComponentNodes)
 
-	#pl.show()
+				#print newConnectedComponentSize
 
-	#stop = timeit.default_timer()
+				# check the size because the MST weight will be 0
 
-	print stop - start 
+				if(newConnectedComponentSize == 1):
+
+					# weight of this connected component will be 0
+					avgMSTWeightForOneGraph += 0
+
+				# otherwise, we must find the weight of the MST
+				else:
+
+					# new adjacency matrix for our connected component
+					adjMatrixConComp = [[0 for x in xrange(newConnectedComponentSize)] for x in xrange(newConnectedComponentSize)]
+
+					# loop through this adjacency matrix to fill it in.
+					for x in xrange(0, newConnectedComponentSize):
+
+						for y in xrange(0, newConnectedComponentSize):
+
+							# construct the adjency matrix
+							adjMatrixConComp[x][y] = randomGraph[connectedComponentNodes[x]][connectedComponentNodes[y]]
+
+					# at this point, find the MST of our newly created adjacency matrix.
+
+					MSTEdges = Prim(adjMatrixConComp)
+
+					# variable to store the weights of each edge
+					edgeSum = 0.00000000000000
+
+					# loop through the given edges to find the MST weight of this connected component
+
+					for x in xrange(0, len(MSTEdges)):
+
+						edgeSum += adjMatrixConComp[MSTEdges[x][0]][MSTEdges[x][1]]
+						print edgeSum
+
+					# just add our edgeSum to our weight
+					avgMSTWeightForOneGraph += edgeSum
+
+				# calculate the avg MST weight for this graph
+				avgMSTWeightForOneGraph = avgMSTWeightForOneGraph/numConnectedComponents
+
+			# sum of all samples
+			MSTWeightSampleSum += avgMSTWeightForOneGraph
+
+		MSTWeightSampleSum = MSTWeightSampleSum/k
+
+		# store our MSTweight for this probability
+		mstWeightArray[prob] = MSTWeightSampleSum
+
+
+	pl.plot(pArray, mstWeightArray)
+
+	pl.show()
+
+	stop = timeit.default_timer()
+
+	print stop - start  
 
 
 
@@ -145,6 +199,7 @@ def connectedComps(randomGraph, n):
 
 						q.put(neighbor)
 						marks[neighbor] = components
+						components += 1
 
 
 		if q.empty() == True:
@@ -158,8 +213,62 @@ def connectedComps(randomGraph, n):
 					marks[i] = components
 					break
 
-	# print marks
-	return components
+	# return marks
+	return marks
+
+
+
+
+# thanks nicolagreco of github for this
+def Prim (Adj):
+
+	T = []
+	n = len(Adj)
+	Nearest = []
+	MinDist = []
+
+	for i in range(0,n):
+		Nearest.append(0)
+		MinDist.append(0)
+
+	for i in range(1, n):
+
+		Nearest[i] = 0
+		MinDist[i] = Adj[i][0]
+
+	for i in range(0, n-1):
+		min = None
+		for j in range(1, n):
+			if ((min and MinDist[j] and 0 <= MinDist[j] < min) or (not min and  0 <= MinDist[j])):
+				min = MinDist[j]
+				k = j
+
+		T.append((k, Nearest[k]))
+		#print T
+
+		MinDist[k] = -1
+		MinDist[Nearest[k]] = -1
+
+		for j in range(1, n):
+			if ((MinDist[j] and Adj[k][j] and Adj[k][j] < MinDist[j]) or not MinDist[j] ):
+				MinDist[j] = Adj[k][j]
+				MinDist[k] = Adj[j][k]
+
+				Nearest[j] = k
+				Nearest[k] = j
+
+	return T
+
+
+
+
+
+
+
+
+
+
+	#print marks
 
 
 
