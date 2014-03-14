@@ -12,7 +12,7 @@ def graphExec():
 
 
 	# value of the number of nodes in our random graph
-	n = 20
+	n = 1000
 
 	# p is the probablility of whether the edge exists
 	p = 0.00
@@ -40,11 +40,10 @@ def graphExec():
 
 		pArray[prob] = p
 
+		MSTWeightSampleSum = 0.0000000000
 
 		# loop k times to get many samples
 		for samples in xrange(0, k):
-
-			MSTWeightSampleSum = 0.0000000000
 		
 			# Go through the newly initialized random graph
 			for x in xrange(0, n):
@@ -111,7 +110,7 @@ def graphExec():
 				if(newConnectedComponentSize == 1):
 
 					# weight of this connected component will be 0
-					avgMSTWeightForOneGraph += 0
+					avgMSTWeightForOneGraph = avgMSTWeightForOneGraph
 
 				# otherwise, we must find the weight of the MST
 				else:
@@ -138,11 +137,11 @@ def graphExec():
 
 					for x in xrange(0, len(MSTEdges)):
 
-						edgeSum += adjMatrixConComp[MSTEdges[x][0]][MSTEdges[x][1]]
+						edgeSum = edgeSum + adjMatrixConComp[MSTEdges[x][0]][MSTEdges[x][1]]
 						#print edgeSum
 
 					# just add our edgeSum to our weight
-					avgMSTWeightForOneGraph += edgeSum
+					avgMSTWeightForOneGraph = avgMSTWeightForOneGraph + edgeSum
 
 				#print numConnectedComponents
 
@@ -150,7 +149,7 @@ def graphExec():
 				avgMSTWeightForOneGraph = avgMSTWeightForOneGraph/numConnectedComponents
 
 			# sum of all samples
-			MSTWeightSampleSum += avgMSTWeightForOneGraph
+			MSTWeightSampleSum = MSTWeightSampleSum + avgMSTWeightForOneGraph
 
 		MSTWeightSampleSum = MSTWeightSampleSum/k
 
