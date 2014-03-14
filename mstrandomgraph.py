@@ -76,8 +76,6 @@ def graphExec():
 			# here we have a newly created random graph. We find the connected components
 			newMarks = connectedComps(randomGraph, n)
 
-			#print newMarks
-
 			# with this array, we create smaller adjacency matrices to represent our connected components
 			numConnectedComponents = max(newMarks)
 
@@ -141,10 +139,12 @@ def graphExec():
 					for x in xrange(0, len(MSTEdges)):
 
 						edgeSum += adjMatrixConComp[MSTEdges[x][0]][MSTEdges[x][1]]
-						print edgeSum
+						#print edgeSum
 
 					# just add our edgeSum to our weight
 					avgMSTWeightForOneGraph += edgeSum
+
+				#print numConnectedComponents
 
 				# calculate the avg MST weight for this graph
 				avgMSTWeightForOneGraph = avgMSTWeightForOneGraph/numConnectedComponents
@@ -175,7 +175,7 @@ def graphExec():
 # function that finds the number of connected components based on an adj matrix
 def connectedComps(randomGraph, n):
 
-	components = 0
+	components = 1
 
 	q = Queue.Queue()
 
@@ -199,7 +199,7 @@ def connectedComps(randomGraph, n):
 
 						q.put(neighbor)
 						marks[neighbor] = components
-						components += 1
+						
 
 
 		if q.empty() == True:

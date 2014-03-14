@@ -12,7 +12,7 @@ def graphExec():
 
 
 	# value of the number of nodes in our random graph
-	n = 500
+	n = 1000
 
 	# p is the probablility of whether the edge exists
 	p = 0.00
